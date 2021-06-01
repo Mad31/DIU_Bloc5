@@ -11,6 +11,9 @@ import queue
 import heapq
 from time import time
 from math import sqrt
+import networkx as nx
+import matplotlib.pyplot as plt
+from level import *
 
 
 class DFS:
@@ -45,5 +48,88 @@ class DFS:
 
         rec_explore(source)
         return mark
+
+class Graph_Box :
+
+    def __init__(self,level) :
+        self.level = level
+        self.G = nx.DiGraph()
+    
+    def set_nodes(self) :
+        print(self.level.map)
+        for x in range(len(self.level.map[0])) :
+            for y in range(len(self.level.map)) :
+                if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
+                    self.G.add_node(str(x)+":"+str(y),pos=(x*4,y*4))
+
+    def set_edges(self) :
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
+                    if (self.level.map[y][x+1] == 7  or self.level.map[y][x+1] == 3 or self.level.map[y][x+1] == 5) and self.level.map[y][x-1] !=1:
+                        self.G.add_edge(str(x)+":"+str(y),str(x+1)+":"+str(y))
+                    if (self.level.map[y][x-1] == 7 or self.level.map[y][x-1] == 3 or self.level.map[y][x-1] == 5) and self.level.map[y][x+1] !=1:
+                        self.G.add_edge(str(x)+":"+str(y),str(x-1)+":"+str(y))
+                    if (self.level.map[y-1][x] == 7 or self.level.map[y-1][x] == 3 or self.level.map[y-1][x] == 5) and self.level.map[y+1][x] !=1:
+                        self.G.add_edge(str(x)+":"+str(y),str(x)+":"+str(y-1))
+                    if (self.level.map[y+1][x] == 7 or self.level.map[y+1][x] == 3 or self.level.map[y+1][x] == 5) and self.level.map[y-1][x] !=1:
+                        self.G.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
+    def affichage(self) :
+        node_pos=nx.get_node_attributes(self.G,'pos')
+        chemin = self.cherche_chemin()
+        color_map=[]
+        for node in self.G :
+            if node in chemin :
+                color_map.append('red')
+            else : 
+                color_map.append('blue')
+        nx.draw_networkx(self.G, node_pos, node_size=700,node_color = color_map)
+        plt.axis('off')
+        plt.show()  
+
+    def cherche_chemin(self) : 
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.mboxes[y][x] ==  True:
+                    depart = str(x)+":"+str(y)
+                if self.level.map[y][x] == 3 :
+                    arrivee = str(x)+":"+str(y)
+        pile = [(depart,[depart])]
+        chemin = []
+        while len(pile) != 0:
+            sommet,chemin = pile.pop()
+            liste_nouveaux_sommets_voisins = [voisin for voisin in self.G[sommet] if not(voisin in chemin)]
+            for voisin in liste_nouveaux_sommets_voisins:
+                if voisin == arrivee:
+
+                    return chemin + [arrivee]
+                pile.append((voisin,chemin + [voisin]))
+        return None
+
+    def cherche_tous_chemins(graphe, depart,arrivee):
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.mboxes[y][x] ==  True:
+                    depart = str(x)+":"+str(y)
+                if self.level.map[y][x] == 3 :
+                    arrivee = str(x)+":"+str(y)
+        chemins = []
+         pile = [(depart,[depart])]
+        chemin = []
+        while len(pile) != 0:
+            sommet,chemin = pile.pop()
+            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
+            for voisin in liste_nouveaux_sommets_voisins:
+                if voisin == arrivee:
+                    chemins.append(chemin + [arrivee])
+            pile.append((voisin,chemin + [voisin]))
+        return chemins
+    
+    
+
+
+
+
+
 
 

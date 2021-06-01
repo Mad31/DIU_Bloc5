@@ -10,6 +10,8 @@ import scores as S
 from graphics import *
 from game import Game
 from utils import *
+from level import *
+from explore import *
 
 
 class GenericMenu:
@@ -116,6 +118,18 @@ class Menu(GenericMenu):
     def continue_game(self):
         sokoban = Game(self.window, continueGame=True)
         sokoban.start()
+ 
+    def affiche_graphe(self) :
+        m = Game(self.window, continueGame = False)
+        niveau = Level(m,"Minicosmos.txt")
+        niveau.load(2)
+        print (niveau.map)
+        graphe  = Graph_Box(niveau)
+        graphe.set_nodes()
+        graphe.set_edges()
+        print(graphe.cherche_chemin())
+        graphe.affichage()
+
 
     def mk_pack_name(self):
         return "[ " + S.scores.pack_name() + " ]"
@@ -133,6 +147,11 @@ class Menu(GenericMenu):
             "Continuer (C)",
             self.font_menu, C.BLACK, C.ACENTER, C.AMID,
             callback=self.continue_game
+        )
+        self.affiche_graphe = Text('Affiche graph_Box',
+            self.font_menu, C.BLACK, C.ACENTER, C.ACUSTOM,
+            # below=self.txtChoose,
+            callback=self.affiche_graphe,
         )
 
         self.txtNew = Text(
@@ -163,6 +182,7 @@ class Menu(GenericMenu):
         )
 
         self.clickableTexts = [
+            self.affiche_graphe,
             self.txtNew,
             self.txtCont,
             self.txtChoose,
@@ -293,6 +313,7 @@ class PackChoice(GenericMenu):
         )
 
         self.clickableTexts = [
+            self.affiche_graphe,
             self.txtChoose,
             self.txtReturn,
             self.txtNext,
