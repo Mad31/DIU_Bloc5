@@ -60,7 +60,7 @@ class Graph_Box :
         for x in range(len(self.level.map[0])) :
             for y in range(len(self.level.map)) :
                 if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
-                    self.G.add_node(str(x)+":"+str(y),pos=(x*4,y*4))
+                    self.G.add_node(str(x)+":"+str(y),pos=(x*4,-y*4))
 
     def set_edges(self) :
         for x in range(1,len(self.level.map[0])-1) :

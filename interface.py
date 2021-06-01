@@ -122,7 +122,7 @@ class Menu(GenericMenu):
     def affiche_graphe(self) :
         m = Game(self.window, continueGame = False)
         niveau = Level(m,"Minicosmos.txt")
-        niveau.load(2)
+        niveau.load(1)
         print (niveau.map)
         graphe  = Graph_Box(niveau)
         graphe.set_nodes()
@@ -148,11 +148,7 @@ class Menu(GenericMenu):
             self.font_menu, C.BLACK, C.ACENTER, C.AMID,
             callback=self.continue_game
         )
-        self.affiche_graphe = Text('Affiche graph_Box',
-            self.font_menu, C.BLACK, C.ACENTER, C.ACUSTOM,
-            # below=self.txtChoose,
-            callback=self.affiche_graphe,
-        )
+        
 
         self.txtNew = Text(
             "Nouvelle partie (N)",
@@ -179,6 +175,12 @@ class Menu(GenericMenu):
             self.font_menu, C.BLACK, C.ACENTER, C.ABOTTOM,
             # below=self.txtChoose,
             callback=self.set_return,
+        )
+
+        self.affiche_graphe = Text('Affiche Graph_Box',
+            self.font_menu, C.BLACK, C.ACENTER, C.ACUSTOM,
+            # below=self.txtQuit,
+            callback=self.affiche_graphe,
         )
 
         self.clickableTexts = [
@@ -271,7 +273,6 @@ class PackChoice(GenericMenu):
         self.reload()
 
     def load(self):
-
         desc = self.read_desc()
 
         self.txtDesc = Paragraph(
@@ -312,12 +313,19 @@ class PackChoice(GenericMenu):
             callback=self.set_return
         )
 
+        self.affiche_graphe = Text(
+            "Affiche Graph_Box",
+            self.font_action, C.BLACK, C.ACENTER, C.ABOTTOM,
+            below=self.txtChoose,
+            callback=self.set_return
+        )
+
         self.clickableTexts = [
-            self.affiche_graphe,
             self.txtChoose,
             self.txtReturn,
             self.txtNext,
             self.txtPrev,
+            self.affiche_graphe,
         ]
 
         self.renderTexts = [
