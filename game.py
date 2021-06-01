@@ -68,6 +68,15 @@ class GameInterface:
         else:
             self.txtTitle.update(" ")
 
+    def affiche_graphe(self) :
+        niveau.load(self.level)
+        # print (niveau.map)
+        graphe  = Graph_Box(niveau)
+        graphe.set_nodes()
+        graphe.set_edges()
+        print(graphe.cherche_chemin())
+        graphe.affichage()
+
     def reset(self):
         self.deactivate_cancel()
         self.is_lost = False
@@ -107,9 +116,9 @@ class GameInterface:
         )
 
         self.txtTest = Text(
-            "Test (T)",
+            "Affiche Graph_Box",
             self.font_messages, C.BLACK, C.ALEFT, C.ABOTTOM,
-            callback=self.game.test_move
+            callback=self.game.affiche_graphe
         )
 
 
@@ -151,6 +160,7 @@ class GameInterface:
             below=self.txtWin,
             callback=None
         )
+
 
 
         self.txtInfo = Text(
@@ -325,6 +335,15 @@ class Game:
 
     def load_next(self):
         self.load_level(nextLevel=True)
+
+    def affiche_graphe(self) :
+        # niveau.load(self.level)
+        # print (niveau.map)
+        graphe  = Graph_Box(self.level)
+        graphe.set_nodes()
+        graphe.set_edges()
+        print(graphe.cherche_chemin())
+        graphe.affichage()
 
     def load_prev(self):
         self.load_level(prevLevel=True)
