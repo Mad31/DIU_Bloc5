@@ -88,12 +88,14 @@ class Graph_Box :
         plt.show()  
 
     def cherche_chemin(self) : 
+        # On cherche les positions de départ et d'arrivée 
         for x in range(1,len(self.level.map[0])-1) :
             for y in range(1,len(self.level.map)-1) :
                 if self.level.mboxes[y][x] ==  True:
                     depart = str(x)+":"+str(y)
                 if self.level.map[y][x] == 3 :
                     arrivee = str(x)+":"+str(y)
+
         pile = [(depart,[depart])]
         chemin = []
         while len(pile) != 0:
@@ -107,6 +109,7 @@ class Graph_Box :
         return None
 
     def cherche_tous_chemins(graphe, depart,arrivee):
+        # On cherche les positions de départ et d'arrivée 
         for x in range(1,len(self.level.map[0])-1) :
             for y in range(1,len(self.level.map)-1) :
                 if self.level.mboxes[y][x] ==  True:
@@ -114,7 +117,7 @@ class Graph_Box :
                 if self.level.map[y][x] == 3 :
                     arrivee = str(x)+":"+str(y)
         chemins = []
-         pile = [(depart,[depart])]
+        pile = [(depart,[depart])]
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
