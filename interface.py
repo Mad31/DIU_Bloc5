@@ -123,11 +123,11 @@ class Menu(GenericMenu):
         m = Game(self.window, continueGame = False)
         niveau = Level(m,"Minicosmos.txt")
         niveau.load(1)
-        print (niveau.map)
+        # print (niveau.map)
         graphe  = Graph_Box(niveau)
         graphe.set_nodes()
         graphe.set_edges()
-        print(graphe.cherche_chemin())
+        # print(len(graphe.cherche_tous_chemins()))
         graphe.affichage()
 
 

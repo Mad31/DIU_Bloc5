@@ -74,7 +74,7 @@ class GameInterface:
         graphe  = Graph_Box(niveau)
         graphe.set_nodes()
         graphe.set_edges()
-        print(graphe.cherche_chemin())
+        graphe.cherche_tous_chemins()
         graphe.affichage()
 
     def reset(self):
@@ -337,12 +337,11 @@ class Game:
         self.load_level(nextLevel=True)
 
     def affiche_graphe(self) :
-        # niveau.load(self.level)
         # print (niveau.map)
         graphe  = Graph_Box(self.level)
         graphe.set_nodes()
         graphe.set_edges()
-        print(graphe.cherche_chemin())
+        # print(graphe.cherche_tous_chemins())
         graphe.affichage()
 
     def load_prev(self):

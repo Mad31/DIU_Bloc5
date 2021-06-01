@@ -76,13 +76,15 @@ class Graph_Box :
                         self.G.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
     def affichage(self) :
         node_pos=nx.get_node_attributes(self.G,'pos')
-        chemin = self.cherche_chemin()
+        chemins = self.cherche_tous_chemins()
         color_map=[]
-        for node in self.G :
-            if node in chemin :
-                color_map.append('red')
-            else : 
-                color_map.append('blue')
+        if chemins != None :
+            chemin = chemins[0]
+            for node in self.G :
+                if node in chemin :
+                    color_map.append('red')
+                else : 
+                    color_map.append('blue')
         nx.draw_networkx(self.G, node_pos, node_size=700,node_color = color_map)
         plt.axis('off')
         plt.show()  
@@ -126,8 +128,7 @@ class Graph_Box :
                 if voisin == arrivee:
                     chemins.append(chemin + [arrivee])
                 pile.append((voisin,chemin + [voisin]))
-            print(chemins)
-        print(len(chemins))
+        chemins.sort(key=lambda item:len(item))
         return chemins
     
     
