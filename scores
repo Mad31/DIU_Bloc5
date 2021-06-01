@@ -1,0 +1,30 @@
+{
+    "current": "Minicosmos.txt",
+    "Original.txt": {
+        "last_level": 0,
+        "levels": []
+    },
+    "Tests.txt": {
+        "last_level": 8,
+        "levels": [
+            null,
+            29,
+            null,
+            null,
+            19,
+            null,
+            23,
+            50,
+            96
+        ]
+    },
+    "Minicosmos.txt": {
+        "last_level": 3,
+        "levels": [
+            null,
+            39,
+            76,
+            111
+        ]
+    }
+}
