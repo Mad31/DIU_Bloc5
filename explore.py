@@ -108,7 +108,7 @@ class Graph_Box :
                 pile.append((voisin,chemin + [voisin]))
         return None
 
-    def cherche_tous_chemins(graphe, depart,arrivee):
+    def cherche_tous_chemins(self):
         # On cherche les positions de départ et d'arrivée 
         for x in range(1,len(self.level.map[0])-1) :
             for y in range(1,len(self.level.map)-1) :
@@ -121,11 +121,13 @@ class Graph_Box :
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
-            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
+            liste_nouveaux_sommets_voisins = [voisin for voisin in self.G[sommet] if not(voisin in chemin)]
             for voisin in liste_nouveaux_sommets_voisins:
                 if voisin == arrivee:
                     chemins.append(chemin + [arrivee])
-            pile.append((voisin,chemin + [voisin]))
+                pile.append((voisin,chemin + [voisin]))
+            print(chemins)
+        print(len(chemins))
         return chemins
     
     
