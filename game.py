@@ -77,6 +77,13 @@ class GameInterface:
         graphe.cherche_tous_chemins()
         graphe.affichage()
 
+    def affiche_graphe_fille(self) :
+        niveau.load(self.level)
+        # print (niveau.map)
+        graphe  = Graph_Fille(niveau)
+        graphe.cons_Graph_fille()
+        graphe.affiche_fille()
+
     def reset(self):
         self.deactivate_cancel()
         self.is_lost = False
@@ -110,9 +117,9 @@ class GameInterface:
         )
 
         self.txtReset = Text(
-            "Recommencer le niveau (R)",
+            "Affiche graphe fille",
             self.font_messages, C.BLACK, C.ACENTER, C.ATOP,
-            callback=self.game.load_level
+            callback=self.game.affiche_graphe_fille
         )
 
         self.txtTest = Text(
@@ -339,10 +346,18 @@ class Game:
     def affiche_graphe(self) :
         # print (niveau.map)
         graphe  = Graph_Box(self.level)
-        graphe.set_nodes()
-        graphe.set_edges()
+        graphe.set_nodes(graphe.G)
+        graphe.set_edges(graphe.G)
         # print(graphe.cherche_tous_chemins())
         graphe.affichage()
+
+    def affiche_graphe_fille(self) :
+        graphe  = Graph_Fille(self.level)
+        graphe.set_nodes(graphe.G_fille)
+        graphe.set_edges(graphe.G_fille)
+        graphe.cons_Graph_fille(graphe.G_fille)
+        graphe.affiche_fille()
+
 
     def load_prev(self):
         self.load_level(prevLevel=True)
