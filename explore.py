@@ -76,7 +76,7 @@ class Graph_Box :
                         graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
     def affichage(self) :
         node_pos=nx.get_node_attributes(self.G,'pos')
-        chemins = self.cherche_tous_chemins()
+        chemins = self.cherche_tous_chemins(self.G)
         # print(chemins)
         color_map=[]
         if  chemins != [] :
@@ -90,7 +90,7 @@ class Graph_Box :
         plt.axis('off')
         plt.show()  
 
-    def cherche_chemin(self) : 
+    def cherche_chemin(self,graphe) : 
         # On cherche les positions de départ et d'arrivée 
         for x in range(1,len(self.level.map[0])-1) :
             for y in range(1,len(self.level.map)-1) :
@@ -102,15 +102,14 @@ class Graph_Box :
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
-            liste_nouveaux_sommets_voisins = [voisin for voisin in self.G[sommet] if not(voisin in chemin)]
+            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
             for voisin in liste_nouveaux_sommets_voisins:
                 if voisin == arrivee:
-
                     return chemin + [arrivee]
                 pile.append((voisin,chemin + [voisin]))
         return None
 
-    def cherche_tous_chemins(self):
+    def cherche_tous_chemins(self,graphe):
         nbre = 0
         # On cherche les positions de départ et d'arrivée 
         for x in range(1,len(self.level.map[0])-1) :
@@ -124,13 +123,13 @@ class Graph_Box :
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
-            liste_nouveaux_sommets_voisins = [voisin for voisin in self.G[sommet] if not(voisin in chemin)]
+            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
             for voisin in liste_nouveaux_sommets_voisins:
                 if voisin == arrivee:
                     chemins.append(chemin + [arrivee])
                 pile.append((voisin,chemin + [voisin]))
             nbre += 1 
-            print(nbre)
+            # print(nbre)
         chemins.sort(key=lambda item:len(item))
         return chemins
     
@@ -149,9 +148,55 @@ class Graph_Fille (Graph_Box):
     
     def affiche_fille(self) :
         node_pos=nx.get_node_attributes(self.G_fille,'pos')
-        nx.draw_networkx(self.G_fille, node_pos, node_size=700)
+        graphe  = Graph_Box(self.level)
+        graphe.set_nodes(graphe.G)
+        graphe.set_edges(graphe.G)
+        chemins = self.cherche_tous_chemins(graphe.G)
+        chemin = self.deplace_fille(chemins,self.G_fille)
+        color_map=[]
+        if  chemin != [] :
+            for node in self.G_fille :
+                if node in chemin :
+                    color_map.append('red')
+                else : 
+                    color_map.append('blue')
+        nx.draw_networkx(self.G_fille, node_pos, node_size=700,node_color = color_map)
         plt.axis('off')
-        plt.show()  
+        plt.show() 
+
+    def deplace_fille (self,chemins,graphe) :
+        trouve = False
+        # recherche du noeud de départ
+        noeud_depart = str(self.level.player_position[0])+":"+str(self.level.player_position[1])
+        
+        # recherche du noeud cible
+        noeud1 = chemins[0][0].split(":")
+        noeud2 = chemins[0][1].split(":")
+        if noeud1[0] == noeud2[0] :
+            if int(noeud1[1]) == int(noeud2[1])+1 :
+                noeud_cible = noeud1[0] + ":" + str(int(noeud1[1])+1)
+            else :
+                noeud_cible = noeud1[0] + ":" + str(int(noeud1[1])-1)
+        else :
+            if int(noeud1[0]) == int(noeud2[0])+1 :
+                noeud_cible = str(int(noeud1[1])+1) + ":" + noeud1[1]
+            else :
+                noeud_cible = str(int(noeud1[1])-1) + ":" + noeud1[1]
+
+        pile = [(noeud_depart,[noeud_depart])]
+        chemin = []
+        while len(pile) != 0:
+            sommet,chemin = pile.pop()
+            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
+            for voisin in liste_nouveaux_sommets_voisins:
+                if voisin == noeud_cible:
+                    return (chemin + [noeud_cible],noeud1,noeud2)
+                pile.append((voisin,chemin + [voisin]))
+        return None
+
+
+
+
 
     
 

@@ -111,9 +111,9 @@ class GameInterface:
         self.txtTitle.set_pos(below=self.txtLevel)
 
         self.txtCancel = Text(
-            "Annuler le dernier coup (C)",
+            "déplacer la fille",
             self.font_messages, C.GREY, C.ARIGHT, C.ATOP,
-            callback=self.game.cancel_move
+            callback=self.game.deplacement_un_fille
         )
 
         self.txtReset = Text(
@@ -358,6 +358,23 @@ class Game:
         graphe.cons_Graph_fille(graphe.G_fille)
         graphe.affiche_fille()
 
+    def deplacement_un_fille(self) :
+        graphe  = Graph_Box(self.level)
+        graphe.set_nodes(graphe.G)
+        graphe.set_edges(graphe.G)
+        chemins = graphe.cherche_tous_chemins(graphe.G)
+        graphe1 = Graph_Fille(self.level)
+        graphe1.set_nodes(graphe1.G_fille)
+        graphe1.set_edges(graphe1.G_fille)
+        deps = graphe1.deplace_fille(chemins,graphe1.G_fille)
+        caisse1 = deps[1]
+        caisse2 = deps[2]
+        deps = deps[0]
+        for i in deps :
+            dep = i.split(":")
+            self.level.player_position = (int(caisse1[0]),int(caisse1[1]))
+        self.level.mboxes[int(caisse1[1])][int(caisse1[0])] = False
+        self.level.mboxes[int(caisse2[1])][int(caisse2[0])] = True
 
     def load_prev(self):
         self.load_level(prevLevel=True)
