@@ -62,6 +62,7 @@ class Solveur :
                 if self.level.mboxes[y][x] ==  True:
                     position_caisse = (x,y)
         self.association = {0 : (position_joueur,position_caisse)}
+        self.Graph_Etats.add_node("0",pos = (position_caisse))
 
     def set_nodes(self,graphe) :
         # Place les noeuds sur un graphe à) partir de la carte niveau
@@ -92,25 +93,17 @@ class Solveur :
                 if self.level.mboxes[y][x] ==  True:
                     graphe.remove_node(str(x)+":"+str(y))
 
-    def affichage(self) :
-        node_pos=nx.get_node_attributes(self.G,'pos')
-        chemins = self.cherche_tous_chemins()
-        # print(chemins)
+    def affichage(self,graphe) :
+        node_pos=nx.get_node_attributes(graphe,'pos')
         color_map=[]
-        if  chemins != [] :
-            chemin = chemins[0]
-            for node in self.G :
-                if node in chemin :
-                    color_map.append('red')
-                else : 
-                    color_map.append('blue')
-        nx.draw_networkx(self.G, node_pos, node_size=700,node_color = color_map)
+        color_map.append('blue')
+        nx.draw_networkx(graphe, node_pos, node_size=700,node_color = color_map)
         plt.axis('off')
         plt.show()
 
-        def affiche_fille(self) :
-        node_pos=nx.get_node_attributes(self.G_fille,'pos')
-        nx.draw_networkx(self.G_fille, node_pos, node_size=700)
+    def affiche_fille(self,graphe) :
+        node_pos=nx.get_node_attributes(graphe,'pos')
+        nx.draw_networkx(graphe, node_pos, node_size=700)
         plt.axis('off')
         plt.show()  
 

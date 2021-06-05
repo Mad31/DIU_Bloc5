@@ -345,18 +345,18 @@ class Game:
 
     def affiche_graphe(self) :
         # print (niveau.map)
-        graphe  = Graph_Box(self.level)
-        graphe.set_nodes(graphe.G)
-        graphe.set_edges(graphe.G)
+        graphe  = Solveur(self.level)
+        graphe.set_nodes(graphe.Graph_Box)
+        graphe.set_edges(graphe.Graph_Box)
         # print(graphe.cherche_tous_chemins())
-        graphe.affichage()
+        graphe.affichage(graphe.Graph_Box)
 
     def affiche_graphe_fille(self) :
-        graphe  = Graph_Fille(self.level)
-        graphe.set_nodes(graphe.G_fille)
-        graphe.set_edges(graphe.G_fille)
-        graphe.cons_Graph_fille(graphe.G_fille)
-        graphe.affiche_fille()
+        graphe  = Solveur(self.level)
+        graphe.set_nodes(graphe.Graph_Fille)
+        graphe.set_edges(graphe.Graph_Fille)
+        graphe.Cons_Graph_fille(graphe.Graph_Fille)
+        graphe.affiche_fille(graphe.Graph_Fille)
 
 
     def load_prev(self):
