@@ -49,20 +49,29 @@ class DFS:
         rec_explore(source)
         return mark
 
-class Graph_Box :
+class Solveur :
 
     def __init__(self,level) :
         self.level = level
-        self.G = nx.DiGraph()
-    
+        self.Graph_Box = nx.DiGraph()
+        self.Graph_Fille = nx.Graph()
+        self.Graph_Etats = nx.Graph()
+        position_joueur = self.level.player_position
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.mboxes[y][x] ==  True:
+                    position_caisse = (x,y)
+        self.association = {0 : (position_joueur,position_caisse)}
+
     def set_nodes(self,graphe) :
-        # print(self.level.map)
+        # Place les noeuds sur un graphe à) partir de la carte niveau
         for x in range(len(self.level.map[0])) :
             for y in range(len(self.level.map)) :
                 if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
                     graphe.add_node(str(x)+":"+str(y),pos=(x*4,-y*4))
 
     def set_edges(self,graphe) :
+        # Place les aretes
         for x in range(1,len(self.level.map[0])-1) :
             for y in range(1,len(self.level.map)-1) :
                 if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
@@ -74,6 +83,15 @@ class Graph_Box :
                         graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y-1))
                     if (self.level.map[y+1][x] == 7 or self.level.map[y+1][x] == 3 or self.level.map[y+1][x] == 5) and self.level.map[y-1][x] !=1:
                         graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
+
+    def Cons_Graph_fille(self,graphe) :
+        # Constructeur du graphe fille
+        # On supprime le noeud où se trouve la caisse
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.mboxes[y][x] ==  True:
+                    graphe.remove_node(str(x)+":"+str(y))
+
     def affichage(self) :
         node_pos=nx.get_node_attributes(self.G,'pos')
         chemins = self.cherche_tous_chemins()
@@ -88,37 +106,27 @@ class Graph_Box :
                     color_map.append('blue')
         nx.draw_networkx(self.G, node_pos, node_size=700,node_color = color_map)
         plt.axis('off')
+        plt.show()
+
+        def affiche_fille(self) :
+        node_pos=nx.get_node_attributes(self.G_fille,'pos')
+        nx.draw_networkx(self.G_fille, node_pos, node_size=700)
+        plt.axis('off')
         plt.show()  
 
-    def cherche_chemin(self) : 
-        # On cherche les positions de départ et d'arrivée 
-        for x in range(1,len(self.level.map[0])-1) :
-            for y in range(1,len(self.level.map)-1) :
-                if self.level.mboxes[y][x] ==  True:
-                    depart = str(x)+":"+str(y)
-                if self.level.map[y][x] == 3 :
-                    arrivee = str(x)+":"+str(y)
+    def cherche_chemin(self,graphe,depart,arrivee) : 
         pile = [(depart,[depart])]
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
-            liste_nouveaux_sommets_voisins = [voisin for voisin in self.G[sommet] if not(voisin in chemin)]
+            liste_nouveaux_sommets_voisins = [voisin for voisin in self.graphe[sommet] if not(voisin in chemin)]
             for voisin in liste_nouveaux_sommets_voisins:
                 if voisin == arrivee:
-
                     return chemin + [arrivee]
                 pile.append((voisin,chemin + [voisin]))
         return None
 
-    def cherche_tous_chemins(self):
-        nbre = 0
-        # On cherche les positions de départ et d'arrivée 
-        for x in range(1,len(self.level.map[0])-1) :
-            for y in range(1,len(self.level.map)-1) :
-                if self.level.mboxes[y][x] ==  True:
-                    depart = str(x)+":"+str(y)
-                if self.level.map[y][x] == 3 :
-                    arrivee = str(x)+":"+str(y)
+    def cherche_tous_chemins(self,graphe,depart,arrivee):
         chemins = []
         pile = [(depart,[depart])]
         chemin = []
@@ -129,29 +137,13 @@ class Graph_Box :
                 if voisin == arrivee:
                     chemins.append(chemin + [arrivee])
                 pile.append((voisin,chemin + [voisin]))
-            nbre += 1 
-            print(nbre)
+        # On trie les chemins du plus court au plus long
         chemins.sort(key=lambda item:len(item))
         return chemins
-    
-class Graph_Fille (Graph_Box):
 
-    def __init__(self,level) :
-        self.level = level
-        self.G_fille = nx.Graph()
-
-    def cons_Graph_fille(self,graphe) :
-        # On supprime le noeud où se trouve la caisse
-        for x in range(1,len(self.level.map[0])-1) :
-            for y in range(1,len(self.level.map)-1) :
-                if self.level.mboxes[y][x] ==  True:
-                    graphe.remove_node(str(x)+":"+str(y))
     
-    def affiche_fille(self) :
-        node_pos=nx.get_node_attributes(self.G_fille,'pos')
-        nx.draw_networkx(self.G_fille, node_pos, node_size=700)
-        plt.axis('off')
-        plt.show()  
+    
+      
 
     
 

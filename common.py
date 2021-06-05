@@ -5,11 +5,11 @@ Common definitions for the whole project.
 
 # List of level packs available for in-game selection
 PACKS = [
-      'Original.txt'
+      'APP.txt'
+    , 'Original.txt'
     , 'Minicosmos.txt'
     , 'Simple Sokoban.txt'
     , 'Tests.txt'
-
     , 'Original_remixed.txt'
     , 'XSokoban.txt'
     , 'Pufiban.txt'
