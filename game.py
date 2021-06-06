@@ -68,22 +68,6 @@ class GameInterface:
         else:
             self.txtTitle.update(" ")
 
-    def affiche_graphe(self) :
-        niveau.load(self.level)
-        # print (niveau.map)
-        graphe  = Graph_Box(niveau)
-        graphe.set_nodes()
-        graphe.set_edges()
-        graphe.cherche_tous_chemins()
-        graphe.affichage()
-
-    def affiche_graphe_fille(self) :
-        niveau.load(self.level)
-        # print (niveau.map)
-        graphe  = Graph_Fille(niveau)
-        graphe.cons_Graph_fille()
-        graphe.affiche_fille()
-
     def reset(self):
         self.deactivate_cancel()
         self.is_lost = False
@@ -111,9 +95,9 @@ class GameInterface:
         self.txtTitle.set_pos(below=self.txtLevel)
 
         self.txtCancel = Text(
-            "Annuler le dernier coup (C)",
+            "Affiche Graphe Etats",
             self.font_messages, C.GREY, C.ARIGHT, C.ATOP,
-            callback=self.game.cancel_move
+            callback=self.game.affiche_graphe_etats
         )
 
         self.txtReset = Text(
@@ -356,7 +340,17 @@ class Game:
         graphe.set_nodes(graphe.Graph_Fille)
         graphe.set_edges(graphe.Graph_Fille)
         graphe.Cons_Graph_fille(graphe.Graph_Fille)
-        graphe.affiche_fille(graphe.Graph_Fille)
+        graphe.affichage(graphe.Graph_Fille)
+
+    def affiche_graphe_etats(self) :
+        graphe = Solveur(self.level)
+        graphe.set_nodes(graphe.Graph_Box)
+        graphe.set_edges(graphe.Graph_Box)
+        graphe.set_nodes(graphe.Graph_Fille)
+        graphe.set_edges(graphe.Graph_Fille)
+        graphe.Cons_Graph_fille(graphe.Graph_Fille)
+        graphe.Cons_Graphe_Etat(graphe.Graph_Box,graphe.Graph_Fille)
+        graphe.affichage(graphe.Graph_Etats)
 
 
     def load_prev(self):

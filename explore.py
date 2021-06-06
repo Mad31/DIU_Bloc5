@@ -3,6 +3,7 @@ Explorations for Sokoban.
 Fill free to add new exploration code here.
 """
 
+from numpy import deprecate
 import pygame
 from pygame.locals import *
 import common as C
@@ -93,6 +94,59 @@ class Solveur :
                 if self.level.mboxes[y][x] ==  True:
                     graphe.remove_node(str(x)+":"+str(y))
 
+    def Cons_Graphe_Etat(self,graphe_box,graphe_fille) :
+        compteur = 0
+        # On récupere la position de la caisse
+        depart_caisse = self.association[0][1]
+        depart_caisse_chaine = str(depart_caisse[0])+":"+str(depart_caisse[1])
+        # On cherche les chemins possibles pour la caisse à partir de sa position actuelle
+        voisins = [n for n in graphe_box.neighbors(depart_caisse_chaine)]
+        # Pour chaque voisin on cherche si la fille peut pousser la caisse
+        for voisin in voisins :
+            print ("voisin : ",voisin)
+            arrivee_caisse = (int(voisin.split(":")[0]),int(voisin.split(":")[1]))
+            # On cherche où doit se positionner la fille pour pousser la caisse
+            # La caisse se déplace vers la gauche ?
+            if arrivee_caisse[0] == depart_caisse[0] - 1 and arrivee_caisse[1] == depart_caisse[1]:
+                arrivee_fille = (depart_caisse[0]+1,depart_caisse[1])
+                arrivee_fille_chaine = str(depart_caisse[0]+1)+":"+str(arrivee_caisse[1])
+            # La caisse se déplace vers la droite ?
+            if arrivee_caisse[0] == depart_caisse[0] + 1 and arrivee_caisse[1] == depart_caisse[1]:
+                arrivee_fille = (depart_caisse[0])-1,depart_caisse[1]
+                arrivee_fille_chaine = str(depart_caisse[0]-1)+":"+str(arrivee_caisse[1])
+            # La caisse de déplace vers le bas ?
+            if arrivee_caisse[1] == depart_caisse[1] + 1 and arrivee_caisse[0] == depart_caisse[0]:
+                arrivee_fille = (depart_caisse[0],depart_caisse[1]-1)
+                arrivee_fille_chaine = str(depart_caisse[0]) + ":" + str(depart_caisse[1]-1)
+            # La caisse se déplace vers le haut ?
+            if arrivee_caisse[1] == depart_caisse[1] - 1 and arrivee_caisse[0] == depart_caisse[0] :
+                arrivee_fille = (depart_caisse[0],depart_caisse[1]+1)
+                arrivee_fille_chaine = str(depart_caisse[0]) + ":" + str(depart_caisse[1] + 1)
+            # On va maintenant chercher si la fille peut pousser la caisse
+            depart_fille = self.association[0][0]
+            depart_fille_chaine = str(depart_fille[0])+":"+str(depart_fille[1])
+            print ("la fille doit aller de ",depart_fille," à ",arrivee_fille)
+            print ("la fille doit aller de ",depart_fille_chaine," à ",arrivee_fille_chaine)
+            # si la fille est déjà au bon endroit pas la peine de chercher un chemin
+            if depart_fille == arrivee_fille :
+                print("la fille est déjà en place, on ajoute un noeud")
+                compteur += 1
+                self.association[compteur] = (depart_caisse,arrivee_caisse)
+                self.Graph_Etats.add_node(str(compteur),pos=(compteur,1))
+                self.Graph_Etats.add_edge("0",str(compteur))
+            elif self.cherche_chemin(graphe_fille,depart_fille_chaine,arrivee_fille_chaine) != None :
+                print("la fille n'est pas en place, on cherche un chemin")
+                compteur += 1
+                self.association[compteur] = (depart_caisse,arrivee_caisse)
+                self.Graph_Etats.add_node(str(compteur),pos=(compteur,1))
+                self.Graph_Etats.add_edge("0",str(compteur))
+        print("association : " , self.association)
+            
+
+
+
+
+
     def affichage(self,graphe) :
         node_pos=nx.get_node_attributes(graphe,'pos')
         color_map=[]
@@ -101,18 +155,13 @@ class Solveur :
         plt.axis('off')
         plt.show()
 
-    def affiche_fille(self,graphe) :
-        node_pos=nx.get_node_attributes(graphe,'pos')
-        nx.draw_networkx(graphe, node_pos, node_size=700)
-        plt.axis('off')
-        plt.show()  
-
-    def cherche_chemin(self,graphe,depart,arrivee) : 
+    def cherche_chemin(self,graphe,depart,arrivee) :
+        print (depart,":",arrivee)
         pile = [(depart,[depart])]
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
-            liste_nouveaux_sommets_voisins = [voisin for voisin in self.graphe[sommet] if not(voisin in chemin)]
+            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
             for voisin in liste_nouveaux_sommets_voisins:
                 if voisin == arrivee:
                     return chemin + [arrivee]
@@ -125,7 +174,7 @@ class Solveur :
         chemin = []
         while len(pile) != 0:
             sommet,chemin = pile.pop()
-            liste_nouveaux_sommets_voisins = [voisin for voisin in self.G[sommet] if not(voisin in chemin)]
+            liste_nouveaux_sommets_voisins = [voisin for voisin in graphe[sommet] if not(voisin in chemin)]
             for voisin in liste_nouveaux_sommets_voisins:
                 if voisin == arrivee:
                     chemins.append(chemin + [arrivee])
