@@ -146,12 +146,21 @@ class Solveur :
                 compteur += 1
 
     def Cons_Graphe_Etat(self,graphe_box,graphe_fille) :
-        niveau = 0
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                 if self.level.map[y][x] == 3 :
+                     position_cible = (x,y)
+        niveau = 2
+        valeur = [i[1] for i in self.association.values()]
         self.Cons_Graphe_Etat_Niveau(graphe_box,"0")
-        liste_noeuds = [n for n in self.association.keys() if len(n) == 2]
-        for i in liste_noeuds :
-            self.Cons_Graphe_Etat_Niveau(graphe_box,i)
-            self.Cons_Graphe_Etat_Niveau(graphe_box,i)
+        while position_cible not in valeur :
+            liste_noeuds = [n for n in self.association.keys() if len(n) == niveau]
+            for i in liste_noeuds :
+                self.Cons_Graphe_Etat_Niveau(graphe_box,i)
+            valeur = [i[1] for i in self.association.values()]
+            niveau += 1
+            print(niveau)
+        print(self.association)
             
     def affichage(self,graphe) :
         node_pos=nx.get_node_attributes(graphe,'pos')
