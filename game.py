@@ -349,8 +349,8 @@ class Game:
         graphe.set_nodes(graphe.Graph_Fille)
         graphe.set_edges(graphe.Graph_Fille)
         graphe.Cons_Graph_fille(graphe.Graph_Fille)
-        graphe.Cons_Graphe_Etat(graphe.Graph_Box,graphe.Graph_Fille)
-        graphe.affichage(graphe.Graph_Etats)
+        print( graphe.Cons_Graphe_Etat(graphe.Graph_Box,graphe.Graph_Fille) )
+        # graphe.affichage(graphe.Graph_Etats)
 
 
     def load_prev(self):
