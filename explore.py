@@ -162,6 +162,8 @@ class Solveur :
         self.Cons_Graphe_Etat_Niveau(graphe_box,"0")
         while position_cible not in valeur :
             liste_noeuds = [n for n in self.association.keys() if len(n) == niveau]
+            if len(liste_noeuds) == 0 :
+                return "pas de solution pour ce niveau"
             for i in liste_noeuds :
                 self.Cons_Graphe_Etat_Niveau(graphe_box,i)
             valeur = [i[1] for i in self.association.values()]
