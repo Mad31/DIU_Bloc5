@@ -160,7 +160,14 @@ class Solveur :
             valeur = [i[1] for i in self.association.values()]
             niveau += 1
             print(niveau)
-        print(self.association)
+        for k, val in self.association.items(): 
+            if position_cible == val[1]: 
+                noeud_solution = k
+        parcours_solution = []
+        while noeud_solution != "0" :
+            parcours_solution.append(self.association[noeud_solution])
+            noeud_solution = list(self.Graph_Etats.predecessors(noeud_solution))[0]
+        print (parcours_solution)
             
     def affichage(self,graphe) :
         node_pos=nx.get_node_attributes(graphe,'pos')
