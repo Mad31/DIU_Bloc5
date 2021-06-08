@@ -164,9 +164,11 @@ class Solveur :
             if position_cible == val[1]: 
                 noeud_solution = k
         parcours_solution = []
+        parcours_solution.append(self.association[noeud_solution])
         while noeud_solution != "0" :
-            parcours_solution.append(self.association[noeud_solution])
             noeud_solution = list(self.Graph_Etats.predecessors(noeud_solution))[0]
+            parcours_solution.append(self.association[noeud_solution])
+            
         print (parcours_solution)
             
     def affichage(self,graphe) :
