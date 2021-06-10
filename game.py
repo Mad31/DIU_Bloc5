@@ -354,11 +354,11 @@ class Game:
         print(solution)
         if solution != "pas de solution pour ce niveau" :
             n = len(solution)
-            while n !=1 : 
+            while n !=1 :
                 position1 = solution[n-1]
                 position2 = solution[n-2]
                 self.deplacement_fille(graphe,position1,position2)
-                n = n - 1
+                n = n -1
         
     
     def deplacement_fille(self,graphe,coup1,coup2) :
@@ -381,8 +381,6 @@ class Game:
         noeud1= str(coup1[0][0]) + ":" + str(coup1[0][1])
         noeud2_f = str(coup2[0][0]) + ":" + str(coup2[0][1])
         chemin = graphe.cherche_chemin(graphe.Graph_Fille,noeud1,noeud2)
-        print ("chemin : ", chemin)
-        print("noued arrivée :", noeud2)
         if chemin != None :
             for n in range(len(chemin)-1):
                 pos_1 = chemin[n].split(":")

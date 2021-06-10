@@ -85,9 +85,34 @@ class Solveur :
                         graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y-1))
                     if (self.level.map[y+1][x] == 7 or self.level.map[y+1][x] == 3 or self.level.map[y+1][x] == 5) and self.level.map[y-1][x] !=1:
                         graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
+    
+    def set_edges_fille(self,graphe) :
+        # Place les aretes
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
+                    if (self.level.map[y][x+1] == 7  or self.level.map[y][x+1] == 3 or self.level.map[y][x+1] == 5):
+                        graphe.add_edge(str(x)+":"+str(y),str(x+1)+":"+str(y))
+                    if (self.level.map[y][x-1] == 7 or self.level.map[y][x-1] == 3 or self.level.map[y][x-1] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x-1)+":"+str(y))
+                    if (self.level.map[y-1][x] == 7 or self.level.map[y-1][x] == 3 or self.level.map[y-1][x] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y-1))
+                    if (self.level.map[y+1][x] == 7 or self.level.map[y+1][x] == 3 or self.level.map[y+1][x] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
 
     def Cons_Graph_fille(self,graphe) :
         # Constructeur du graphe fille
+        for x in range(1,len(self.level.map[0])-1) :
+            for y in range(1,len(self.level.map)-1) :
+                if self.level.map[y][x] == 7 or self.level.map[y][x] == 3 or self.level.map[y][x] == 5:
+                    if (self.level.map[y][x+1] == 7  or self.level.map[y][x+1] == 3 or self.level.map[y][x+1] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x+1)+":"+str(y))
+                    if (self.level.map[y][x-1] == 7 or self.level.map[y][x-1] == 3 or self.level.map[y][x-1] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x-1)+":"+str(y))
+                    if (self.level.map[y-1][x] == 7 or self.level.map[y-1][x] == 3 or self.level.map[y-1][x] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y-1))
+                    if (self.level.map[y+1][x] == 7 or self.level.map[y+1][x] == 3 or self.level.map[y+1][x] == 5) :
+                        graphe.add_edge(str(x)+":"+str(y),str(x)+":"+str(y+1))
         # On supprime le noeud où se trouve la caisse
         for x in range(1,len(self.level.map[0])-1) :
             for y in range(1,len(self.level.map)-1) :
@@ -101,7 +126,7 @@ class Solveur :
         depart_caisse_chaine = str(depart_caisse[0])+":"+str(depart_caisse[1])
         # On construit le graphe fille
         self.set_nodes(self.Graph_Fille)
-        self.set_edges(self.Graph_Fille)
+        self.set_edges_fille(self.Graph_Fille)
         # position_fille = self.association[str(numero_niveau)+"-"+str(compteur)][0]
         # position_fille = str(position_fille[0]) + ":" + str(position_fille[1])
         self.Graph_Fille.remove_node(depart_caisse_chaine)
@@ -168,7 +193,6 @@ class Solveur :
                 self.Cons_Graphe_Etat_Niveau(graphe_box,i)
             valeur = [i[1] for i in self.association.values()]
             niveau += 1
-            print(niveau)
         for k, val in self.association.items(): 
             if position_cible == val[1]: 
                 noeud_solution = k
