@@ -349,8 +349,62 @@ class Game:
         graphe.set_nodes(graphe.Graph_Fille)
         graphe.set_edges(graphe.Graph_Fille)
         graphe.Cons_Graph_fille(graphe.Graph_Fille)
-        print( graphe.Cons_Graphe_Etat(graphe.Graph_Box,graphe.Graph_Fille) )
+        solution =  graphe.Cons_Graphe_Etat(graphe.Graph_Box,graphe.Graph_Fille)
         # graphe.affichage(graphe.Graph_Etats)
+        print(solution)
+        if solution != "pas de solution pour ce niveau" :
+            n = len(solution)
+            while n !=1 : 
+                position1 = solution[n-1]
+                position2 = solution[n-2]
+                self.deplacement_fille(graphe,position1,position2)
+                n = n - 1
+        
+    
+    def deplacement_fille(self,graphe,coup1,coup2) :
+        graphe.set_nodes(graphe.Graph_Fille)
+        graphe.set_edges(graphe.Graph_Fille)
+        graphe.Cons_Graph_fille(graphe.Graph_Fille)
+        direction_fille = None
+        if coup2[0][0] == coup2[1][0] and coup2[0][1] + 1 == coup2[1][1]:
+            noeud2= str(coup2[0][0]) + ":" + str(coup2[0][1]-1)
+            direction_fille = C.DOWN
+        elif coup2[0][0] == coup2[1][0] and coup2[0][1] - 1 == coup2[1][1]:
+            noeud2= str(coup2[0][0]) + ":" + str(coup2[0][1]+1)
+            direction_fille = C.UP
+        elif coup2[0][1] == coup2[1][1] and coup2[0][0] + 1 == coup2[1][0]:
+            noeud2= str(coup2[0][0]-1) + ":" + str(coup2[0][1])
+            direction_fille = C.RIGHT
+        elif coup2[0][1] == coup2[1][1] and coup2[0][0] - 1 == coup2[1][0]:
+            noeud2= str(coup2[0][0]+1) + ":" + str(coup2[0][1])
+            direction_fille = C.LEFT
+        noeud1= str(coup1[0][0]) + ":" + str(coup1[0][1])
+        noeud2_f = str(coup2[0][0]) + ":" + str(coup2[0][1])
+        chemin = graphe.cherche_chemin(graphe.Graph_Fille,noeud1,noeud2)
+        print ("chemin : ", chemin)
+        print("noued arrivée :", noeud2)
+        if chemin != None :
+            for n in range(len(chemin)-1):
+                pos_1 = chemin[n].split(":")
+                pos_2 = chemin[n+1].split(":")
+                if int(pos_1[1]) == int(pos_2[1]) - 1 :
+                    # vers le bas
+                    key = DIRKEY[C.DOWN]
+                    self.move_character(key)
+                elif int(pos_1[1]) == int(pos_2[1]) + 1 :
+                    # vers le haut
+                    key = DIRKEY[C.UP]
+                    self.move_character(key)
+                elif int(pos_1[0]) == int(pos_2[0]) + 1 :
+                    # vers le haut
+                    key = DIRKEY[C.LEFT]
+                    self.move_character(key)
+                elif int(pos_1[0]) == int(pos_2[0]) - 1 :
+                    # vers le haut
+                    key = DIRKEY[C.RIGHT]
+                    self.move_character(key)
+        key = DIRKEY[direction_fille]
+        self.move_character(key)
 
 
     def load_prev(self):
