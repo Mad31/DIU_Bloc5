@@ -193,6 +193,7 @@ class Solveur :
                 self.Cons_Graphe_Etat_Niveau(graphe_box,i)
             valeur = [i[1] for i in self.association.values()]
             niveau += 1
+            print(niveau)
         for k, val in self.association.items(): 
             if position_cible == val[1]: 
                 noeud_solution = k
@@ -223,6 +224,9 @@ class Solveur :
                     return chemin + [arrivee]
                 pile.append((voisin,chemin + [voisin]))
         return None
+
+    def cherche_chemin2(self,graphe,depart,arrivee) :
+        return nx.shortest_path(graphe,depart,arrivee)
 
     def cherche_tous_chemins(self,graphe,depart,arrivee):
         chemins = []

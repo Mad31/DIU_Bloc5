@@ -380,7 +380,7 @@ class Game:
             direction_fille = C.LEFT
         noeud1= str(coup1[0][0]) + ":" + str(coup1[0][1])
         noeud2_f = str(coup2[0][0]) + ":" + str(coup2[0][1])
-        chemin = graphe.cherche_chemin(graphe.Graph_Fille,noeud1,noeud2)
+        chemin = graphe.cherche_chemin2(graphe.Graph_Fille,noeud1,noeud2)
         if chemin != None :
             for n in range(len(chemin)-1):
                 pos_1 = chemin[n].split(":")
