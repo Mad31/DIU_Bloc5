@@ -134,6 +134,7 @@ class Solveur :
         voisins = [n for n in graphe_box.neighbors(depart_caisse_chaine)]
         # Pour chaque voisin on cherche si la fille peut pousser la caisse
         for voisin in voisins :
+            print(compteur,":",voisin)
             arrivee_caisse = (int(voisin.split(":")[0]),int(voisin.split(":")[1]))
             # On cherche où doit se positionner la fille pour pousser la caisse
             # La caisse se déplace vers la gauche ?
@@ -155,16 +156,21 @@ class Solveur :
             # On va maintenant chercher si la fille peut pousser la caisse
             depart_fille = self.association[noeud_niveau][0]
             depart_fille_chaine = str(depart_fille[0])+":"+str(depart_fille[1])
-            # print ("la fille doit aller de ",depart_fille," à ",arrivee_fille)
+            print ("la fille doit aller de ",depart_fille," à ",arrivee_fille)
+            self.Graph_Fille = nx.Graph()
+            self.set_nodes(self.Graph_Fille)
+            self.set_edges_fille(self.Graph_Fille)
+            self.Graph_Fille.remove_node(depart_caisse_chaine)
             if not (depart_caisse,arrivee_caisse) in self.association.values() :
+                print("cherche chemin")
                 if depart_fille == arrivee_fille :
                     # print("la fille est déjà en place, on ajoute un noeud")
                     self.association[noeud_niveau+str(compteur)] = (depart_caisse,arrivee_caisse)
                     self.Graph_Etats.add_node(noeud_niveau+str(compteur),pos=(-len(noeud_niveau)*3 + int(noeud_niveau) * 4 + compteur,-len(noeud_niveau)))
                     self.Graph_Etats.add_edge(noeud_niveau,noeud_niveau+str(compteur))
                     compteur += 1
-                elif self.cherche_chemin(self.Graph_Fille,depart_fille_chaine,arrivee_fille_chaine) != None :
-                    # print("la fille n'est pas en place, on cherche un chemin")
+                elif self.cherche_chemin2(self.Graph_Fille,depart_fille_chaine,arrivee_fille_chaine) != None :
+                    print("la fille n'est pas en place, on cherche un chemin")
                     self.association[noeud_niveau+str(compteur)] = (depart_caisse,arrivee_caisse)
                     self.Graph_Etats.add_node(noeud_niveau+str(compteur),pos=(-len(noeud_niveau)*3 + int(noeud_niveau) * 4 + compteur,-len(noeud_niveau)))
                     self.Graph_Etats.add_edge(noeud_niveau,noeud_niveau+str(compteur))
@@ -190,6 +196,7 @@ class Solveur :
             if len(liste_noeuds) == 0 :
                 return "pas de solution pour ce niveau"
             for i in liste_noeuds :
+                print(i)
                 self.Cons_Graphe_Etat_Niveau(graphe_box,i)
             valeur = [i[1] for i in self.association.values()]
             niveau += 1
@@ -214,6 +221,7 @@ class Solveur :
         plt.show()
 
     def cherche_chemin(self,graphe,depart,arrivee) :
+        print("cherche")
         pile = [(depart,[depart])]
         chemin = []
         while len(pile) != 0:
@@ -226,7 +234,10 @@ class Solveur :
         return None
 
     def cherche_chemin2(self,graphe,depart,arrivee) :
-        return nx.shortest_path(graphe,depart,arrivee)
+        try :
+            return nx.shortest_path(graphe,depart,arrivee)
+        except :
+            return None
 
     def cherche_tous_chemins(self,graphe,depart,arrivee):
         chemins = []
