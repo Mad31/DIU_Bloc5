@@ -95,9 +95,9 @@ class GameInterface:
         self.txtTitle.set_pos(below=self.txtLevel)
 
         self.txtCancel = Text(
-            "Affiche Graphe Etats",
+            "La meilleure solution !",
             self.font_messages, C.GREY, C.ARIGHT, C.ATOP,
-            callback=self.game.affiche_graphe_etats
+            callback=self.game.la_solution
         )
 
         self.txtReset = Text(
@@ -342,7 +342,7 @@ class Game:
         graphe.Cons_Graph_fille(graphe.Graph_Fille)
         graphe.affichage(graphe.Graph_Fille)
 
-    def affiche_graphe_etats(self) :
+    def la_solution(self) :
         graphe = Solveur(self.level)
         graphe.set_nodes(graphe.Graph_Box)
         graphe.set_edges(graphe.Graph_Box)
